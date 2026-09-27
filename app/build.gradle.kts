@@ -11,8 +11,8 @@ android {
         applicationId = "com.apexhub.sample"
         minSdk = 21
         targetSdk = 34
-        versionCode = 1
-        versionName = "1.0.0"
+        versionCode = 3
+        versionName = "1.0.1"
     }
 
     // Demo signing key, committed on purpose so every build is signed with the SAME
