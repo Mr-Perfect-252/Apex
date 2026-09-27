@@ -1,0 +1,3 @@
+<resources>
+    <style name="Theme.Apex" parent="Theme.AppCompat.DayNight.NoActionBar" />
+</resources>
