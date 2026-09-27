@@ -4,10 +4,10 @@ A single-screen Android app (it just says **Apex**) wired to **both** official S
 
 | SDK | Artifact (Maven Central) | Used for |
 |-----|--------------------------|----------|
-| **ApexHub OTA SDK** | `io.github.mr-perfect-252:sdk:1.0.1` | In-app updates, background update checks, built-in analytics |
-| **Open Analytics** | `io.github.mr-perfect-252:open-analytics-android:1.0.0` | Sessions, screen views, offline batching, crash reports |
+| **ApexHub OTA SDK** | `io.github.mr-perfect-252:sdk:1.0.1` | In-app updates, background update checks, built-in event tracking |
+| **Apex Analytics** | `io.github.mr-perfect-252:apex-analytics:1.0.0` | Sessions, screen views, offline batching, crash reports |
 
-CI builds a signed debug APK and prints both SHAs. See [`.github/workflows/build-apk.yml`](.github/workflows/build-apk.yml).
+CI builds a signed release APK and prints both SHAs. See [`.github/workflows/build-apk.yml`](.github/workflows/build-apk.yml).
 
 ---
 
@@ -37,17 +37,25 @@ ApexHubUpdater(context, config)
   .trackEvent(appId, eventType, eventName, metadata)   // -> POST /api/analytics/event
 ```
 
-### Open Analytics — `AnalyticsConfig` (only `endpoint` is required)
+### Apex Analytics — `AnalyticsConfig` (only `apiKey` is required)
+
+`apex-analytics` talks to **ApexHub only** — the ingestion endpoints are baked into the SDK, so
+there is no `endpoint` to pass. Your `pk_live_…` key activates the SDK and attributes every event.
 
 ```
-endpoint              required   e.g. https://apex-hub-production.vercel.app/api/v1/track
-crashReportEndpoint   optional   defaults to sibling ".../api/v1/crash-report"
-appId                 optional   label for your own reference
-apiKey                optional   your pk_live_ key (sent as Authorization: Bearer)
-headers               optional   extra headers on every request
+apiKey                required   your pk_live_ key (sent as Authorization: Bearer); must start pk_live_ / pk_test_
+appId                 optional   label attached to events (default null)
+headers               optional   extra headers on every request (default {})
 enabled               optional   true (default)
 debug                 optional   false (default)
+inactivityTimeoutMs   optional   1800000 (30 min) — session expiry
+flushIntervalMs       optional   5000 — background flush cadence
+batchSize             optional   20 — events per flush
 promptForCrashReport  optional   true (default) — ask the user before sending a crash
+disableAutoScreenView / disableAutoCrashCapture / disableAutoPerformance   optional   false (default) — opt-outs
+
+endpoint / crashReportEndpoint   NOT configurable — fixed to
+                                 https://apex-hub-production.vercel.app/api/v1/{track,crash-report}
 ```
 
 Runtime calls: `OpenAnalytics.init(context, config)`, `.track(...)`, `.trackScreen(...)`,
@@ -58,7 +66,7 @@ Runtime calls: `OpenAnalytics.init(context, config)`, `.track(...)`, `.trackScre
 ## 2. Where it's wired
 
 - `app/src/main/java/com/apexhub/sample/SampleApp.kt` — inits both SDKs from `Application.onCreate()`
-  (OTA `schedulePeriodicCheck` + `OpenAnalytics.init`) and holds the key/endpoint constants.
+  (OTA `schedulePeriodicCheck` + `OpenAnalytics.init`) and holds the `PUBLIC_KEY` constant.
 - `app/src/main/java/com/apexhub/sample/MainActivity.kt` — the single screen; "Check for updates"
   runs `checkAndPrompt()`, "Track event" records the same event through **both** SDKs.
 - `app/src/main/AndroidManifest.xml` — declares `POST_NOTIFICATIONS` (the SDK merges
@@ -104,7 +112,7 @@ real — never commit a production keystore.
 ## 5. Build
 
 CI (recommended — no local Android SDK needed): push to `main` or run the **Build APK** workflow
-manually; download the `apex-sample-debug` artifact.
+manually; download the `apex-sample-release` artifact.
 
 Local:
 

@@ -25,12 +25,13 @@ class SampleApp : Application() {
         )
         updater.schedulePeriodicCheck(appDisplayName = "Apex")
 
-        // ── 2) open-analytics-android ─────────────────────────────────────
+        // ── 2) apex-analytics ─────────────────────────────────────
+        // The ingestion endpoint is fixed to the ApexHub backend inside the SDK, so
+        // there is nothing to point at — pass only your app's public key.
         OpenAnalytics.init(
             this,
             AnalyticsConfig(
-                endpoint = TRACK_URL,     // required
-                apiKey = PUBLIC_KEY,      // your pk_live_ key (sent as Authorization)
+                apiKey = PUBLIC_KEY,      // required — activates the SDK, attributes events
                 appId = "apex-sample",    // optional label
                 debug = true,             // verbose logcat
             )
@@ -44,8 +45,5 @@ class SampleApp : Application() {
 
         // ApexHub app public key (Console → your app → Settings). Safe to ship in the app.
         const val PUBLIC_KEY = "pk_live_B2Lj4nS1OPWtJxkEmqHGfW0nYZxmQxC5"
-
-        // ApexHub backend analytics ingestion endpoint (open-analytics-android wire format).
-        const val TRACK_URL = "https://apex-hub-production.vercel.app/api/v1/track"
     }
 }

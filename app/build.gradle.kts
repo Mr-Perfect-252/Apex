@@ -62,6 +62,6 @@ dependencies {
     // ApexHub OTA SDK (official) — updates, background checks + built-in analytics
     implementation("io.github.mr-perfect-252:sdk:1.0.1")
 
-    // open-analytics-android — sessions, screen views, offline batching, crash reports
-    implementation("io.github.mr-perfect-252:open-analytics-android:1.0.0")
+    // apex-analytics — sessions, screen views, offline batching, crash reports
+    implementation("io.github.mr-perfect-252:apex-analytics:1.0.0")
 }
