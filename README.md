@@ -72,7 +72,10 @@ Runtime calls: `OpenAnalytics.init(context, config)`, `.track(...)`, `.trackScre
 4. Launch the app → "Check for updates". Updates install through the normal Android installer
    (the app must be signed with the same key and a higher versionCode).
 
-With the placeholder key, update checks simply 404 silently — the sample still builds and runs.
+This sample is already wired to a live app registered in the ApexHub store
+(package `com.apexhub.sample`, public key `pk_live_B2Lj4nS1OPWtJxkEmqHGfW0nYZxmQxC5`),
+so update checks and analytics work against the real backend out of the box.
+To ship your own app, replace these constants with your app's values.
 
 ## 4. Signing keystore + SHA
 
