@@ -42,8 +42,8 @@ class SampleApp : Application() {
     companion object {
         private const val TAG = "ApexSample"
 
-        // Replace with YOUR app's public key from the ApexHub Console → your app → Settings.
-        const val PUBLIC_KEY = "pk_live_REPLACE_WITH_YOUR_KEY"
+        // ApexHub app public key (Console → your app → Settings). Safe to ship in the app.
+        const val PUBLIC_KEY = "pk_live_B2Lj4nS1OPWtJxkEmqHGfW0nYZxmQxC5"
 
         // ApexHub backend analytics ingestion endpoint (open-analytics-android wire format).
         const val TRACK_URL = "https://apex-hub-production.vercel.app/api/v1/track"
