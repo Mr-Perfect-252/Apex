@@ -33,12 +33,12 @@ jobs:
       - name: Make gradlew executable
         run: chmod +x ./gradlew
 
-      - name: Build debug APK
-        run: ./gradlew assembleDebug --no-daemon --stacktrace
+      - name: Build release APK
+        run: ./gradlew assembleRelease --no-daemon --stacktrace
 
       - name: Verify signature and print SHAs
         run: |
-          APK=$(find app/build/outputs/apk/debug -name '*.apk' | head -1)
+          APK=$(find app/build/outputs/apk/release -name '*.apk' | head -1)
           echo "APK: $APK"
 
           BT=$(ls "$ANDROID_HOME/build-tools" | sort -V | tail -1)
@@ -54,7 +54,7 @@ jobs:
             echo "## Build outputs"
             echo ""
             echo "### APK"
-            echo "- Artifact: \`apex-sample-debug\`"
+            echo "- Artifact: \`apex-sample-release\`"
             echo "- Size: $(stat -c%s "$APK") bytes"
             echo ""
             echo "### APK SHA-256  _(ApexHub upload / SDK download verification)_"
@@ -70,6 +70,6 @@ jobs:
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: apex-sample-debug
-          path: app/build/outputs/apk/debug/*.apk
+          name: apex-sample-release
+          path: app/build/outputs/apk/release/*.apk
           if-no-files-found: error
